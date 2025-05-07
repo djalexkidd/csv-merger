@@ -1,0 +1,18 @@
+services:
+  csv-merger:
+    image: ghcr.io/djalexkidd/csv-merger:latest
+    container_name: csv-merger
+    restart: always
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.csv-merger.rule=Host(`merger.change.me`)"
+      - "traefik.http.routers.csv-merger.entrypoints=websecure"
+      - "traefik.http.routers.csv-merger.tls=true"
+      - "traefik.http.services.csv-merger.loadbalancer.server.port=80"
+      - "traefik.http.routers.csv-merger.tls.certresolver=myresolver"
+
+networks:
+  proxy:
+    name: proxy
