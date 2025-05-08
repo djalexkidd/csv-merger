@@ -17,8 +17,8 @@ document.getElementById('mergeBtn').addEventListener('click', () => {
     // 3 - Supprimer lignes "Inactif" dans colonne 'Statut'
     const glpiFiltered = glpi.filter(row => !['Inactif', 'Supprimé'].includes(row['Statut']));
 
-    // 4 - Supprimer lignes "hors tension" dans colonne 'Etat'
-    const vmsFiltered = vms.filter(row => row['Etat'] !== 'hors tension');
+    // 4 - Supprimer lignes "Hors tension" dans colonne 'État'
+    const vmsFiltered = vms.filter(row => row['État'] !== 'Hors tension');
 
     // 5 - Vérifier le nombre de lignes
     console.log('GLPI lignes :', glpiFiltered.length);
@@ -31,7 +31,7 @@ document.getElementById('mergeBtn').addEventListener('click', () => {
         'Espace utilisé': '',
         "Mémoire de l'hôte": '',
         CPU: '',
-        Etat: 'actif'
+        État: 'Sous tension'
       });
     }
 
@@ -41,6 +41,7 @@ document.getElementById('mergeBtn').addEventListener('click', () => {
       const vm = vmsMap[row['Nom']];
       return {
         ...row,
+        'État': vm?.['État'] || '',
         'Espace utilisé': vm?.['Espace utilisé'] || '',
         "Mémoire de l'hôte": vm?.["Mémoire de l'hôte"] || '',
         CPU: vm?.CPU || ''
@@ -73,6 +74,11 @@ document.getElementById('mergeBtn').addEventListener('click', () => {
       } else if (['BDD', 'DATAS', 'VSI'].includes(grp)) {
         row['Groupe responsable'] = 'ALL_DDP';
       }
+    });
+
+    // Supprimer la colonne vide
+    merged.forEach(row => {
+      delete row[''];
     });
 
     // Générer et télécharger le CSV fusionné
