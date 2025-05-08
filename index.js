@@ -24,17 +24,6 @@ document.getElementById('mergeBtn').addEventListener('click', () => {
     console.log('GLPI lignes :', glpiFiltered.length);
     console.log('VMS lignes :', vmsFiltered.length);
 
-    // 6 - Ajouter "unicancer-tiers2c" s'il n'existe pas
-    if (!vmsFiltered.find(row => row['Nom'] === 'unicancer-tiers2c')) {
-      vmsFiltered.push({
-        Nom: 'unicancer-tiers2c',
-        'Espace utilisé': '',
-        "Mémoire de l'hôte": '',
-        CPU: '',
-        État: 'Sous tension'
-      });
-    }
-
     // 7 - Copier les colonnes depuis vms vers glpi
     const vmsMap = Object.fromEntries(vmsFiltered.map(row => [row['Nom'], row]));
     const merged = glpiFiltered.map(row => {
